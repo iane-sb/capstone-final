@@ -5,15 +5,18 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PatientController;
 
-Route::get('/patients/create', [PatientController::class, 'create']);
-Route::post('/patients', [PatientController::class, 'store'])->name('patients.store');
+// Route::get('/patients/create', [PatientController::class, 'create']);
+// Route::post('/patients', [PatientController::class, 'store'])->name('patients.store');
 
-Route::get('/appointments/create/{patient}', [AppointmentController::class, 'create'])
-    ->name('appointments.create');
+// Route::get('/appointments/create/{patient}', [AppointmentController::class, 'create'])
+//     ->name('appointments.create');
 
-Route::post('/appointments', [AppointmentController::class, 'store'])
-    ->name('appointments.store');
+// Route::post('/appointments', [AppointmentController::class, 'store'])
+//     ->name('appointments.store');
 
+
+Route::get('/patients/register', [PatientController::class, 'create'])->name('patients.create');
+Route::post('/patients/register', [PatientController::class, 'store'])->name('patients.store');
 
 
 // Route::get('/', function () {

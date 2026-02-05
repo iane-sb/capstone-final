@@ -22,12 +22,10 @@ class PatientController extends Controller
 
     public function store(StorePatientRequest $request)
     {
-        $patient = $this->patientService->register(
-            $request->validated()
-        );
+        $patient = $this->patientService->register($request->validated());
 
         return redirect()
-            ->route('appointments.create', $patient->id)
+            ->route('appointments.create', $patient->id ?? null)
             ->with('success', 'Patient registered successfully.');
     }
 }
