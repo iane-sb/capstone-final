@@ -17,33 +17,36 @@ class AppointmentController extends Controller
     {
         $this->appointmentService = $appointmentService;
     }
-    
-    public function store(StoreAppointmentRequest $requests): JsonResponse
-    {
-        try {
-            $appointment = $this->appointmentService->schedule(
-                $requests->validated()
-            );
 
-            return response()->json([
-                'message'=> 'appointment scheduled success wow',
-                'data'=> $appointment
-            ], 201);
-        } catch (\Exception $e){
-            return response()->json([
-                'message'=> $e->getMessage()
-            ], 409);
-        }
+    public function basta(){
+        
     }
-
-     public function getByDate(string $date): JsonResponse 
-     {
-        return response()->json([
-            'data'=> $this->appointmentService->getByDate($date)
-        ]);
-     }
     
 
+    //kani siya diri for testing ra ni
+    // public function store(StoreAppointmentRequest $requests): JsonResponse
+    // {
+    //     try {
+    //         $appointment = $this->appointmentService->schedule(
+    //             $requests->validated()
+    //         );
 
+    //         return response()->json([
+    //             'message'=> 'appointment scheduled success wow',
+    //             'data'=> $appointment
+    //         ], 201);
+    //     } catch (\Exception $e){
+    //         return response()->json([
+    //             'message'=> $e->getMessage()
+    //         ], 409);
+    //     }
+    // }
+
+    //  public function getByDate(string $date): JsonResponse 
+    //  {
+    //     return response()->json([
+    //         'data'=> $this->appointmentService->getByDate($date)
+    //     ]);
+    //  }
 
 }
