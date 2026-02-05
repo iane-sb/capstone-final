@@ -15,5 +15,19 @@ class PatientController extends Controller
         $this->patientService = $patientService;
     }
 
-    
+    public function create()
+    {
+        return view('patients.create');
+    }
+
+    public function store(StorePatientRequest $request)
+    {
+        $patient = $this->patientService->register(
+            $request->validated()
+        );
+
+        return redirect()
+            ->route('appointments.create', $patient->id)
+            ->with('success', 'Patient registered successfully.');
+    }
 }

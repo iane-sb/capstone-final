@@ -26,11 +26,11 @@ class StorePatientRequest extends FormRequest
             'middle_name'=>'nullable|string|max:50',
             'last_name'=>'required|string|max:50',
             'date_of_birth'=>'required|date',
-            'gender'=>'required|in:male, female, other',
+            'gender'=>'required|in:male,female,other',
             'phone'=>'required|digits:11',
             'email'=>'required|email|unique',
             'address'=>'required|string|max:100',
-            'patient_number'=>'required|digits:11',
+            'patient_number'=>'required|string|unique:patients,patient_number',
         ];
     }
 }

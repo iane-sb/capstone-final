@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreAppointmentRequest;
-use App\Models\Appointment;
-use App\Services\AppointmentService;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Nette\Utils\Json;
+use App\Models\Patient;
+use App\Models\Appointment;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Services\AppointmentService;
+use App\Http\Requests\StoreAppointmentRequest;
 
 class AppointmentController extends Controller
 {
@@ -18,9 +19,21 @@ class AppointmentController extends Controller
         $this->appointmentService = $appointmentService;
     }
 
-    public function basta(){
-        
+        public function create($patientId)
+        {
+        $patient = Patient::findOrFail($patientId);
+        return view('appointments.create', compact('patient'));
+        }
+
+    public function store(StoreAppointmentRequest $request)
+        {
+        $this->appointmentService->schedule(
+            $request->validated()
+        );
+
+        return redirect()->back()->with('success', 'Appointment scheduled.');
     }
+
     
 
     //kani siya diri for testing ra ni
