@@ -2,11 +2,18 @@
 
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\PatientController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Route::get('/appointments/patients', [PatientController::class, 'view']);
+// Route::post('appointments', [PatientController::class, 'storepatient']);
+
+// Route::get ('/appointments/create', [AppointmentController::class, 'create']);
+// Route::post('appointments', [AppointmentController::class, 'storeAppointment']);
 
 // Route::post('/appointments', [AppointmentController::class, 'store']);
 // Route::get('/appointments/{date}', [AppointmentController::class, 'getByDate']);

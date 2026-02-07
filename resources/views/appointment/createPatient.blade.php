@@ -34,12 +34,30 @@
     <input type="date" name="date_of_birth" value="{{ old('date_of_birth') }}"><br><br>
     
     <label>Gender</label><br>
-    <input type="date" name="appointment_date" value="{{ old('appointment_date') }}"><br><br>
+     <select name="gender">
+        <option value="">Select Gender</option>
 
-    <label>Appointment Time</label><br>
-    <input type="time" name="appointment_time" value="{{ old('appointment_time') }}"><br><br>
+        <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>
+            Male
+        </option>
 
-    
+        <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>
+            Female
+        </option>
+
+        <option value="other" {{ old('gender') == 'other' ? 'selected' : '' }}>
+            Other
+        </option>
+    </select><br><br>
+
+    <label>Phone</label><br>
+    <input type="tel" name="phone" value="{{ old('phone') }}"><br><br>
+
+    <label>Email</label><br>
+    <input type="email" name="email" value="{{ old('email') }}"><br><br>
+
+    {{-- <label>Address</label><br>
+    <input type="text" name="address" value="{{ old('address') }}"><br><br> --}}
 
     <button type="submit">Book Appointment</button>
 </form>
