@@ -4,53 +4,151 @@
 
 @section('content')
 
+<div class="min-h-screen bg-green-50 py-12 px-4">
+    <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-2xl p-8 border border-green-100">
 
-@if(session('success'))
-    <p style="color: green">{{ session('success') }}</p>
-@endif
+        <!-- Title -->
+        <div class="mb-8 text-center">
+            <h2 class="text-3xl font-bold text-green-700">
+                Book an Appointment
+            </h2>
+            <p class="text-gray-500 mt-2">
+                Please fill in your details to register and schedule your visit.
+            </p>
+        </div>
 
+        <!-- Success Message -->
+        @if(session('success'))
+            <div class="mb-6 p-4 rounded-lg bg-green-100 text-green-700 border border-green-300">
+                {{ session('success') }}
+            </div>
+        @endif
 
-@if($errors->any())
-    <ul style="color: red">
-        @foreach($errors->all() as $error)
-            <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-@endif
+        <!-- Error Messages -->
+        @if($errors->any())
+            <div class="mb-6 p-4 rounded-lg bg-red-100 text-red-700 border border-red-300">
+                <ul class="list-disc pl-5 space-y-1">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
-<form method="POST" action="{{ route('appointment.storePatient') }}">
-    @csrf
+        <form method="POST" action="{{ route('appointment.storePatient') }}" class="space-y-6">
+            @csrf
 
-    <input type="text" name="first_name" value="{{ old('first_name') }}" placeholder="First Name">
-    @error('first_name') <small>{{ $message }}</small> @enderror <br></br>
+            <!-- Name Row -->
+            <div class="grid md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        First Name *
+                    </label>
+                    <input type="text" name="first_name" value="{{ old('first_name') }}"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-green-400 focus:outline-none"
+                        placeholder="First Name">
+                    @error('first_name')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
-    <input type="text" name="middle_name" value="{{ old('middle_name') }}" placeholder="Middle Name"><br></br>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Middle Name
+                    </label>
+                    <input type="text" name="middle_name" value="{{ old('middle_name') }}"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-green-400 focus:outline-none"
+                        placeholder="Middle Name">
+                </div>
 
-    <input type="text" name="last_name" value="{{ old('last_name') }}" placeholder="Last Name">
-    @error('last_name') <small>{{ $message }}</small> @enderror <br></br>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Last Name *
+                    </label>
+                    <input type="text" name="last_name" value="{{ old('last_name') }}"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-green-400 focus:outline-none"
+                        placeholder="Last Name">
+                    @error('last_name')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
 
-    <input type="date" name="date_of_birth" value="{{ old('date_of_birth') }}"> <br></br>
+            <!-- DOB + Gender -->
+            <div class="grid md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Date of Birth
+                    </label>
+                    <input type="date" name="date_of_birth" value="{{ old('date_of_birth') }}"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-green-400 focus:outline-none">
+                </div>
 
-    <select name="gender">
-        <option value="">Select Gender</option>
-        <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Male</option>
-        <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Female</option>
-        <option value="other" {{ old('gender') == 'other' ? 'selected' : '' }}>Other</option>
-    </select><br></br>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Gender
+                    </label>
+                    <select name="gender"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-green-400 focus:outline-none">
+                        <option value="">Select Gender</option>
+                        <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Male</option>
+                        <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Female</option>
+                        <option value="other" {{ old('gender') == 'other' ? 'selected' : '' }}>Other</option>
+                    </select>
+                </div>
+            </div>
 
-    <input type="text" name="phone" value="{{ old('phone') }}" placeholder="Phone"> <br></br>
-    <input type="email" name="email" value="{{ old('email') }}" placeholder="Email"> <br></br>
+            <!-- Contact Info -->
+            <div class="grid md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Phone
+                    </label>
+                    <input type="text" name="phone" value="{{ old('phone') }}"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-green-400 focus:outline-none"
+                        placeholder="09XXXXXXXXX">
+                </div>
 
-    <input type="text" name="address" value="{{ old('address') }}" placeholder="Address"> <br></br>
-    <input type="text" name="patient_number" value="{{ old('patient_number') }}" placeholder="Patient Number"> <br></br>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Email
+                    </label>
+                    <input type="email" name="email" value="{{ old('email') }}"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-green-400 focus:outline-none"
+                        placeholder="example@email.com">
+                </div>
+            </div>
 
-    <button type="submit">Register Patient</button>
-</form>
+            <!-- Address -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                    Address
+                </label>
+                <input type="text" name="address" value="{{ old('address') }}"
+                    class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-green-400 focus:outline-none"
+                    placeholder="Full Address">
+            </div>
 
-@if(session('success'))
-    <p>{{ session('success') }}</p>
-@endif
+            <!-- Patient Number -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                    Patient Number
+                </label>
+                <input type="text" name="patient_number" value="{{ old('patient_number') }}"
+                    class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-green-400 focus:outline-none"
+                    placeholder="Auto-generated or provided">
+            </div>
 
+            <!-- Submit Button -->
+            <div class="pt-4 text-center">
+                <button type="submit"
+                    class="bg-green-600 text-white px-8 py-3 rounded-xl shadow-md hover:bg-green-700 transition font-semibold">
+                    Register & Continue
+                </button>
+            </div>
 
-</body>
-</html>
+        </form>
+    </div>
+</div>
+
+@endsection

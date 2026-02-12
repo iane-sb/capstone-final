@@ -20,7 +20,7 @@ class PatientService
       ->exists();
     
       if ($exists){
-            throw new \Exception('patient already exists');
+            throw new \Exception('You have already booked');
         }
       return patient::create([
         'first_name' => $data['first_name'],

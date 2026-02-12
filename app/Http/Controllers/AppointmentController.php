@@ -17,6 +17,7 @@ class AppointmentController extends Controller
     {
         $this->appointmentService = $appointmentService;
     }
+    
 
     // public function create()
     // {

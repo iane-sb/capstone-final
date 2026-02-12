@@ -4,13 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>@yield('title')bastas</title>
+    <title>@yield('title')</title>
+     @vite('resources/css/app.css')
+     @include('layouts.header')
 </head>
 <body>
+     
+
+    <main class="py-6">
+        @yield('content')
+    </main>
     
-    <h1>what a sigma</h1>
 
 
-   
 </body>
 </html>
