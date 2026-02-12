@@ -18,31 +18,39 @@
     </ul>
 @endif
 
-<form method="POST" action="/appointments">
+<form method="POST" action="{{ route('appointment.storePatient') }}">
     @csrf
 
-    <label>First Name</label><br>
-    <input type="text" name="first_name" value="{{ old('first_name') }}"><br><br>
+    <input type="text" name="first_name" value="{{ old('first_name') }}" placeholder="First Name">
+    @error('first_name') <small>{{ $message }}</small> @enderror <br></br>
 
-    <label>Middle Name</label><br>
-    <input type="text" name="middle_name" value="{{ old('middle_name') }}"><br><br>
+    <input type="text" name="middle_name" value="{{ old('middle_name') }}" placeholder="Middle Name"><br></br>
 
-    <label>Last Name</label><br>
-    <input type="text" name="last_name" value="{{ old('last_name') }}"><br><br>
+    <input type="text" name="last_name" value="{{ old('last_name') }}" placeholder="Last Name">
+    @error('last_name') <small>{{ $message }}</small> @enderror <br></br>
 
-    <label>Date of Birth</label><br>
-    <input type="date" name="date_of_birth" value="{{ old('date_of_birth') }}"><br><br>
-    
-    <label>Gender</label><br>
-    <input type="date" name="appointment_date" value="{{ old('appointment_date') }}"><br><br>
+    <input type="date" name="date_of_birth" value="{{ old('date_of_birth') }}"> <br></br>
 
-    <label>Appointment Time</label><br>
-    <input type="time" name="appointment_time" value="{{ old('appointment_time') }}"><br><br>
+    <select name="gender">
+        <option value="">Select Gender</option>
+        <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Male</option>
+        <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Female</option>
+        <option value="other" {{ old('gender') == 'other' ? 'selected' : '' }}>Other</option>
+    </select><br></br>
 
-    
+    <input type="text" name="phone" value="{{ old('phone') }}" placeholder="Phone"> <br></br>
+    <input type="email" name="email" value="{{ old('email') }}" placeholder="Email"> <br></br>
 
-    <button type="submit">Book Appointment</button>
+    <input type="text" name="address" value="{{ old('address') }}" placeholder="Address"> <br></br>
+    <input type="text" name="patient_number" value="{{ old('patient_number') }}" placeholder="Patient Number"> <br></br>
+
+    <button type="submit">Register Patient</button>
 </form>
+
+@if(session('success'))
+    <p>{{ session('success') }}</p>
+@endif
+
 
 </body>
 </html>

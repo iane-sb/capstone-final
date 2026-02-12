@@ -18,16 +18,16 @@ class AppointmentController extends Controller
         $this->appointmentService = $appointmentService;
     }
 
-    public function create()
-    {
-        return view('appointment.create');
-    }
+    // public function create()
+    // {
+    //     return view('appointment.create');
+    // }
 
-    public function storeAppointment(StoreAppointmentRequest $request)
-    {
-       $validated = $request()->validate('StoreAppointmentRequest');
+    // public function storeAppointment(StoreAppointmentRequest $request)
+    // {
+    //    $validated = $request()->validate('StoreAppointmentRequest');
 
-       Appointment::create($validated);
+    //    Appointment::create($validated);
        
-    }
+    // }
 }
