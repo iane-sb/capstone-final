@@ -4,6 +4,7 @@
 
 @section('content')
 
+
 <div class="min-h-screen bg-green-50 py-12 px-4">
     <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-2xl p-8 border border-green-100">
 
@@ -138,12 +139,64 @@
                     class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-green-400 focus:outline-none"
                     placeholder="Auto-generated or provided">
             </div>
+           <!-- ================= SERVICE SELECTION ================= -->
+     <div class="border-t border-green-200 pt-6">
+     <h3 class="text-xl font-semibold text-green-700 mb-4"> Select Service *</h3>
+        <select name="service_id"
+            class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-green-400 focus:outline-none">
+            <option value="">-- Choose a Service --</option>
+            @foreach($services as $service)
+                <option value="{{ $service->id }}" {{ old('service_id') == $service->id ? 'selected' : '' }}>
+                    {{ ucfirst($service->name) }} — {{ $service->description }} ({{ $service->estimated_time }} min)
+                </option>
+            @endforeach
+        </select>
+
+            @error('service_id')
+                <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <!-- Schedule Section -->
+        <div class="border-t border-green-200 pt-6">
+            <h3 class="text-xl font-semibold text-green-700 mb-4">
+                Appointment date
+            </h3>
+
+            <div class="grid md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Date *
+                    </label>
+                    <input type="date" name="schedule"
+                        value="{{ old('schedule') }}"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-green-400 focus:outline-none">
+                    @error('schedule')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Time *
+                    </label>
+                    <input type="time" name="schedule_time"
+                        value="{{ old('schedule_time') }}"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-green-400 focus:outline-none">
+                    @error('schedule_time')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+        </div>
+
+
 
             <!-- Submit Button -->
             <div class="pt-4 text-center">
                 <button type="submit"
                     class="bg-green-600 text-white px-8 py-3 rounded-xl shadow-md hover:bg-green-700 transition font-semibold">
-                    Register & Continue
+                    Book Appointment
                 </button>
             </div>
 
