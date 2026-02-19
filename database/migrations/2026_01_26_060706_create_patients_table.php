@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('phone', 30)->nullable();
             $table->string('email', 30)->nullable();
             $table->string('address', 50)->nullable();
-            $table->string('patient_number')->unique();
+            // $table->string('patient_number')->unique();
             $table->timestamps();
         });
     }

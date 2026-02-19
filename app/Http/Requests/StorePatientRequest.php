@@ -25,7 +25,7 @@ class StorePatientRequest extends FormRequest
             'phone' => 'nullable|string|max:30',
             'email' => 'nullable|email|max:30|unique:patients,email',
             'address' => 'nullable|string|max:50',
-            'patient_number' => 'nullable|string|unique:patients,patient_number',
+            // 'patient_number' => 'nullable|string|unique:patients,patient_number',
         ];
     }
 }

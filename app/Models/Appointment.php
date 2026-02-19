@@ -11,6 +11,7 @@ class Appointment extends Model
         'service_id',
         'schedule',
         'schedule_time',
+        'queue_number',
         'status'
     ];
 

@@ -16,7 +16,7 @@ class PatientService
       ->where('phone', $data ['phone'])
       ->where('email', $data ['email'])
       ->where('address', $data ['address'])
-      ->where('patient_number', $data ['patient_number'])
+      // ->where('patient_number', $data ['patient_number'])
       ->exists();
     
       if ($exists){
@@ -31,7 +31,7 @@ class PatientService
         'phone' => $data['phone'],
         'email' => $data['email'],
         'address' => $data['address'],
-        'patient_number' => $data['patient_number'],
+        // 'patient_number' => $data['patient_number'],
       ]);
         
     }

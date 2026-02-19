@@ -129,16 +129,6 @@
                     class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-green-400 focus:outline-none"
                     placeholder="Full Address">
             </div>
-
-            <!-- Patient Number -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">
-                    Patient Number
-                </label>
-                <input type="text" name="patient_number" value="{{ old('patient_number') }}"
-                    class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-green-400 focus:outline-none"
-                    placeholder="Auto-generated or provided">
-            </div>
            <!-- ================= SERVICE SELECTION ================= -->
      <div class="border-t border-green-200 pt-6">
      <h3 class="text-xl font-semibold text-green-700 mb-4"> Select Service *</h3>

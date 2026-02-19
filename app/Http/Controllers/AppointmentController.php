@@ -11,12 +11,12 @@ use Nette\Utils\Json;
 
 class AppointmentController extends Controller
 {
-    protected AppointmentService $appointmentService;
+    // protected AppointmentService $appointmentService;
     
-    public function __construct(AppointmentService $appointmentService)
-    {
-        $this->appointmentService = $appointmentService;
-    }
+    // public function __construct(AppointmentService $appointmentService)
+    // {
+    //     $this->appointmentService = $appointmentService;
+    // }
     
 
     // public function create()

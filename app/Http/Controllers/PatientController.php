@@ -37,10 +37,10 @@ class PatientController extends Controller
     {
         $data = $request->validated();
 
-        // 1️⃣ Register patient
+        // register patient
         $patient = $this->patientService->register($data);
 
-        // 2️⃣ Create appointment
+        // mao ni mo create og appointment
         $appointment = $this->appointmentService->schedule([
             'patient_id' => $patient->id,
             'service_id' => $data['service_id'],
@@ -50,7 +50,7 @@ class PatientController extends Controller
 
         return redirect()
             ->route('appointment.create')
-            ->with('success', 'Appointment booked successfully!');
+            ->with('success', 'Appointment booked successfully!Your queue number is Q-' . str_pad($appointment->queue_number, 3, '0', STR_PAD_LEFT));
     }
 
     
