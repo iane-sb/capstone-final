@@ -11,7 +11,12 @@ Route::get('/', function () {
 
 Route::get('/appointments/create', [PatientController::class, 'create'])->name('appointment.create');
 Route::post('/appointments', [PatientController::class, 'storePatient'])->name('appointment.storePatient');
+Route::post('/appointments/{id}/start', [PatientController::class, 'start'])
+    ->name('appointments.start');
 
+Route::get('/queue-board', function () {
+    return view('queue-board');
+});
 // Route::resource('patients', PatientController::class);
 
 // Route::get('/appointments/patients', [PatientController::class, 'view']);

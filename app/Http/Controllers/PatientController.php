@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\QueueUpdated;
+use App\Http\Requests\StorePatientRequest;
+use App\Models\Appointment;
 use App\Models\Patient;
 use App\Models\Service;
-use Illuminate\Http\Request;
-use App\Services\PatientService;
-use App\Http\Requests\StorePatientRequest;
 use App\Services\AppointmentService;
+use App\Services\PatientService;
+use Illuminate\Http\Request;
 
 
 class PatientController extends Controller
@@ -29,6 +31,19 @@ class PatientController extends Controller
         $services = Service::where('is_active', true)->get();
 
         return view('appointment.create', compact('services'));
+    }
+    
+    public function start($id)
+    {
+        $appointment = Appointment::findOrFail($id);
+
+        $appointment->update([
+            'status' => 'started'
+        ]);
+
+        broadcast(new QueueUpdated($appointment->queue_number))->toOthers();
+
+        return back();
     }
 
 
