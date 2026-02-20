@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Staff;
+use App\Models\Department;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,16 +18,32 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // User::factory()->create([
+        //     'name' => 'Test User',
+        //     'email' => 'test@example.com',
+        // ]);
+
+        // $this->call([
+        //     DepartmentSeeder::class,
+        //     ServiceSeeder::class,
+        // ]);
+        $department = Department::first(); // or find a specific one
+
+        $user = User::create([
+            'name' => 'Admin Staff',
+            'email' => 'staff@example.com',
+            'password' => Hash::make('password123'),
         ]);
 
-        $this->call([
-            DepartmentSeeder::class,
-            ServiceSeeder::class,
+        Staff::create([
+            'user_id'      => $user->id,
+            'department_id'=> $department?->id,
+            'employee_id'  => 'EMP-0001',
+            'position'     => 'Front Desk',
+            'phone'        => '09123456789',
+            'is_active'    => true,
         ]);
-    }
+            }
 }
