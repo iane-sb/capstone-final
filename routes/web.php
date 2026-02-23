@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\DoctorDashboardController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\StaffAuthController;
 use App\Http\Controllers\StaffDashboardController;
@@ -10,6 +11,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Route::get('/home', [Controller::class, 'index'])->name('home');
 
 Route::get('/appointments/create', [PatientController::class, 'create'])->name('appointment.create');
 Route::post('/appointments', [PatientController::class, 'storePatient'])->name('appointment.storePatient');
@@ -32,6 +35,14 @@ Route::middleware('staff')->group(function () {
 
     Route::patch('/staff/appointments/{appointment}/status', [StaffDashboardController::class, 'updateStatus'])
         ->name('staff.appointments.updateStatus');
+});
+
+// Doctor-only routes (staff + doctor role/position)
+Route::middleware(['staff', 'doctor'])->prefix('doctor')->name('doctor.')->group(function () {
+    Route::get('/dashboard', [DoctorDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/patients/{patient}/add-record', [DoctorDashboardController::class, 'addRecord'])->name('patients.add-record');
+    Route::post('/medical-records', [DoctorDashboardController::class, 'storeRecord'])->name('medical-records.store');
+    Route::get('/medical-records', [DoctorDashboardController::class, 'medicalRecords'])->name('medical-records');
 });
 // Route::resource('patients', PatientController::class);
 

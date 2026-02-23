@@ -44,7 +44,7 @@
                 </a>
 
                 <!-- CTA Buttons -->
-                <a href="#" 
+                <a href="{{ route('staff.login') }}"  
                    class="text-green-600 font-semibold hover:underline">
                     Login
                 </a>

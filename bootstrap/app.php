@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureDoctor;
 use App\Http\Middleware\EnsureStaff;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -15,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
+            'doctor' => EnsureDoctor::class,
             'staff' => EnsureStaff::class,
         ]);
     })

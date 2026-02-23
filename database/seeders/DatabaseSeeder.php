@@ -45,5 +45,30 @@ class DatabaseSeeder extends Seeder
             'phone'        => '09123456789',
             'is_active'    => true,
         ]);
-            }
+
+        // Doctor user (for doctor dashboard access)
+        $doctorUser = User::firstOrCreate(
+            ['email' => 'doctor@example.com'],
+            [
+                'name'     => 'Doctor janbai',
+                'password' => Hash::make('password123'),
+            ]
+        );
+
+        if (! $doctorUser->staff) {
+            Staff::create([
+                'user_id'       => $doctorUser->id,
+                'department_id' => $department?->id,
+                'employee_id'   => 'EMP-0002',
+                'position'      => 'Doctor',
+                'phone'         => '09187654321',
+                'is_active'     => true,
+            ]);
+        }
+
+        $this->call([
+                 DepartmentSeeder::class,
+                 ServiceSeeder::class,
+            ]);
+    }
 }

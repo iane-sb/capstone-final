@@ -3,27 +3,36 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Date;
 
 class MedicalRecord extends Model
 {
-     protected $fillable = [
+    public $timestamps = false;
+
+    protected $fillable = [
         'patient_id',
         'diagnosis_id',
         'details',
-     ];
-     protected $date = [
-        'created_on'=> 'datetime'
-     ];
+        'created_by',
+        'created_on',
+    ];
 
-    public function medical_records_createdby()
+    protected function casts(): array
     {
-        return $this->belongsTo(User::class);
+        return [
+            'created_on' => 'datetime',
+        ];
     }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
     public function patient()
     {
         return $this->belongsTo(Patient::class);
     }
+
     public function diagnosis()
     {
         return $this->belongsTo(Diagnosis::class);
