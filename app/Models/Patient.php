@@ -16,7 +16,7 @@ class Patient extends Model
         'phone',
         'email',
         'address',
-        'patient_number',
+        // 'patient_number',
     ];
 
     protected $casts = [
@@ -34,5 +34,10 @@ class Patient extends Model
     public function appointments()
     {
         return $this->hasMany(Appointment::class);
+    }
+
+    public function medicalRecords()
+    {
+        return $this->hasMany(MedicalRecord::class);
     }
 }

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('service_id')->constrained()->onDelete('cascade');
             $table->date('schedule');
             $table->time('schedule_time');
-            $table->enum('status', ['done','started', 'not started'])->default('not started');
+            $table->enum('status', ['completed','started', 'not started', 'cancelled'])->default('not started');
             $table->timestamps();
         }); 
     }

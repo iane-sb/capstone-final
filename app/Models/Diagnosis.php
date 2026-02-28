@@ -9,14 +9,18 @@ class Diagnosis extends Model
     protected $fillable = [
         'name',
         'created_by',
-        'created_on'
+        'created_on',
     ];
-    protected $date = [
-        'created_on'=> 'datetime'
-     ];
 
-    public function diagnosis_createdby()
+    protected function casts(): array
     {
-        return $this->belongsTo(User::class);
+        return [
+            'created_on' => 'datetime',
+        ];
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 }
