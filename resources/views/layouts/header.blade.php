@@ -49,7 +49,7 @@
                     Login
                 </a>
 
-                <a href="#" 
+                <a href="{{ route('appointment.create') }}"  
                    class="bg-green-600 text-white px-6 py-2.5 rounded-xl shadow-md hover:bg-green-700 transition font-semibold">
                     Book Appointment
                 </a>
