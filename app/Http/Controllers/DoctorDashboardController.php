@@ -29,10 +29,15 @@ class DoctorDashboardController extends Controller
     public function addRecord(Patient $patient)
     {
         $diagnoses = Diagnosis::orderBy('name')->get();
+        $currentRecord = MedicalRecord::with('diagnosis')
+            ->where('patient_id', $patient->id)
+            ->orderByDesc('created_on')
+            ->first();
 
         return view('doctor.add-record', [
             'patient' => $patient,
             'diagnoses' => $diagnoses,
+            'currentRecord' => $currentRecord,
         ]);
     }
 
@@ -63,22 +68,44 @@ class DoctorDashboardController extends Controller
             $diagnosisId = $diagnosis->id;
         }
 
-        MedicalRecord::create([
-            'patient_id' => $validated['patient_id'],
-            'diagnosis_id' => $diagnosisId,
-            'details' => $validated['details'],
-            'created_by' => auth()->id(),
-            'created_on' => now(),
-        ]);
+        $currentRecord = MedicalRecord::where('patient_id', $validated['patient_id'])
+            ->orderByDesc('created_on')
+            ->first();
+
+        if ($currentRecord) {
+            $currentRecord->update([
+                'diagnosis_id' => $diagnosisId,
+                'details' => $validated['details'],
+                'updated_by' => auth()->id(),
+                'updated_on' => now(),
+            ]);
+        } else {
+            MedicalRecord::create([
+                'patient_id' => $validated['patient_id'],
+                'diagnosis_id' => $diagnosisId,
+                'details' => $validated['details'],
+                'created_by' => auth()->id(),
+                'created_on' => now(),
+            ]);
+        }
 
         return redirect()
             ->route('doctor.medical-records', ['patient_id' => $validated['patient_id']])
-            ->with('success', 'Medical record added successfully.');
+            ->with('success', $currentRecord ? 'Medical record updated successfully.' : 'Medical record added successfully.');
     }
 
     public function medicalRecords(Request $request)
     {
+        $date = $request->query('date', now()->toDateString());
+
+        try {
+            $date = \Carbon\Carbon::parse($date)->toDateString();
+        } catch (\Exception $e) {
+            $date = now()->toDateString();
+        }
+
         $query = MedicalRecord::with(['patient', 'diagnosis', 'creator'])
+            ->whereDate('created_on', $date)
             ->orderBy('created_on', 'desc');
 
         $patientId = $request->query('patient_id');
@@ -91,6 +118,7 @@ class DoctorDashboardController extends Controller
         return view('doctor.medical-records', [
             'records' => $records,
             'patientId' => $patientId,
+            'date' => $date,
         ]);
     }
 }

@@ -42,11 +42,49 @@
             @endif
 
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-                    <h2 class="text-lg font-semibold text-gray-800">Records</h2>
-                    @if($patientId)
-                        <a href="{{ route('doctor.medical-records') }}" class="text-sm text-blue-600 hover:underline">Show all</a>
-                    @endif
+                <div class="px-6 py-4 border-b border-gray-100 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                    <div>
+                        <h2 class="text-lg font-semibold text-gray-800">Records</h2>
+                        <p class="text-xs text-gray-500 mt-1">
+                            Records for:
+                            <span class="font-semibold">
+                                {{ \Carbon\Carbon::parse($date ?? now()->toDateString())->format('F d, Y') }}
+                            </span>
+                            @if($patientId && $records->first() && $records->first()->patient)
+                                — for {{ $records->first()->patient->full_name }}
+                            @elseif($patientId)
+                                — for selected patient
+                            @endif
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <form method="GET" action="{{ route('doctor.medical-records') }}" class="flex items-center gap-2 text-sm">
+                            <label class="text-gray-600">Date:</label>
+                            <input
+                                type="date"
+                                name="date"
+                                value="{{ $date ?? now()->toDateString() }}"
+                                class="border border-gray-300 rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                            >
+                            @if($patientId)
+                                <input type="hidden" name="patient_id" value="{{ $patientId }}">
+                            @endif
+                            <button
+                                type="submit"
+                                class="bg-blue-600 text-white px-3 py-1.5 rounded-lg font-semibold hover:bg-blue-700 transition"
+                            >
+                                Go
+                            </button>
+                        </form>
+                        @if($patientId)
+                            <a
+                                href="{{ route('doctor.medical-records', ['date' => $date ?? now()->toDateString()]) }}"
+                                class="text-sm text-blue-600 hover:underline"
+                            >
+                                Show all patients
+                            </a>
+                        @endif
+                    </div>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="min-w-full text-sm">
@@ -57,13 +95,18 @@
                                 <th class="px-4 py-3 text-left font-semibold text-gray-600">Details</th>
                                 <th class="px-4 py-3 text-left font-semibold text-gray-600">Created by</th>
                                 <th class="px-4 py-3 text-left font-semibold text-gray-600">Date</th>
+                                <th class="px-4 py-3 text-left font-semibold text-gray-600">Last updated</th>
+                                <th class="px-4 py-3 text-left font-semibold text-gray-600">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($records as $record)
                                 <tr class="border-t border-gray-100 hover:bg-gray-50">
                                     <td class="px-4 py-3">
-                                        <a href="{{ route('doctor.medical-records', ['patient_id' => $record->patient_id]) }}" class="text-blue-600 hover:underline">
+                                        <a
+                                            href="{{ route('doctor.medical-records', ['patient_id' => $record->patient_id, 'date' => $date ?? now()->toDateString()]) }}"
+                                            class="text-blue-600 hover:underline"
+                                        >
                                             {{ $record->patient ? $record->patient->full_name : '—' }}
                                         </a>
                                     </td>
@@ -71,10 +114,32 @@
                                     <td class="px-4 py-3 max-w-xs truncate" title="{{ $record->details }}">{{ Str::limit($record->details, 50) }}</td>
                                     <td class="px-4 py-3">{{ $record->creator ? $record->creator->name : '—' }}</td>
                                     <td class="px-4 py-3">{{ $record->created_on ? $record->created_on->format('M d, Y H:i') : '—' }}</td>
+                                    <td class="px-4 py-3">
+                                        @if($record->updated_on)
+                                            <div class="text-xs text-gray-700">
+                                                {{ $record->updated_on->format('M d, Y H:i') }}
+                                            </div>
+                                            <div class="text-xs text-gray-500">
+                                                {{ $record->updater ? $record->updater->name : '—' }}
+                                            </div>
+                                        @else
+                                            <span class="text-gray-400">—</span>
+                                        @endif
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        @if($record->patient)
+                                            <a href="{{ route('doctor.patients.add-record', $record->patient) }}"
+                                               class="inline-flex items-center gap-1 bg-blue-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg hover:bg-blue-700 transition">
+                                                Edit current
+                                            </a>
+                                        @else
+                                            —
+                                        @endif
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="px-4 py-6 text-center text-gray-500">No medical records found.</td>
+                                    <td colspan="7" class="px-4 py-6 text-center text-gray-500">No medical records found.</td>
                                 </tr>
                             @endforelse
                         </tbody>

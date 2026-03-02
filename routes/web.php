@@ -29,7 +29,7 @@ Route::post('/staff/login', [StaffAuthController::class, 'login'])->name('staff.
 Route::post('/staff/logout', [StaffAuthController::class, 'logout'])->name('staff.logout');
 
 // Staff-only routes
-Route::middleware('staff')->group(function () {
+Route::middleware(['staff', 'dashboard.no-cache'])->group(function () {
     Route::get('/staff/dashboard', [StaffDashboardController::class, 'index'])
         ->name('staff.dashboard');
 
@@ -38,23 +38,10 @@ Route::middleware('staff')->group(function () {
 });
 
 // Doctor-only routes (staff + doctor role/position)
-Route::middleware(['staff', 'doctor'])->prefix('doctor')->name('doctor.')->group(function () {
+Route::middleware(['staff', 'doctor', 'dashboard.no-cache'])->prefix('doctor')->name('doctor.')->group(function () {
     Route::get('/dashboard', [DoctorDashboardController::class, 'index'])->name('dashboard');
     Route::get('/patients/{patient}/add-record', [DoctorDashboardController::class, 'addRecord'])->name('patients.add-record');
     Route::post('/medical-records', [DoctorDashboardController::class, 'storeRecord'])->name('medical-records.store');
     Route::get('/medical-records', [DoctorDashboardController::class, 'medicalRecords'])->name('medical-records');
 });
-// Route::resource('patients', PatientController::class);
 
-// Route::get('/appointments/patients', [PatientController::class, 'view']);
-// Route::post('appointments', [PatientController::class, 'storepatient']);
-
-// Route::get ('/appointments/create', [AppointmentController::class, 'create']);
-// Route::post('appointments', [AppointmentController::class, 'storeAppointment']);
-
-// Route::post('/appointments', [AppointmentController::class, 'store']);
-// Route::get('/appointments/{date}', [AppointmentController::class, 'getByDate']);
-
-// Route::post('/appointments', [AppointmentController::class, 'store']);
-// Route::get('/appointments/{date}', [AppointmentController::class, 'byDate']);
-// Route::post('/user', [Controller::class, 'store']);

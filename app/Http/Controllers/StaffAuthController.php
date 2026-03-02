@@ -4,13 +4,33 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 
 class StaffAuthController extends Controller
 {
+    /**
+     * Check if the current staff user is a doctor (by role or position).
+     */
+    private function isDoctor(): bool
+    {
+        $user = Auth::user();
+        if (! $user || ! $user->staff || ! $user->staff->is_active) {
+            return false;
+        }
+        $staff = $user->staff;
+        if (Schema::hasColumn('staff', 'role_id') && $staff->role_id) {
+            $role = $staff->relationLoaded('role') ? $staff->role : $staff->role()->first();
+            if ($role && $role->name === 'Doctor') {
+                return true;
+            }
+        }
+        return strtolower(trim($staff->position ?? '')) === 'doctor';
+    }
+
     public function showLoginForm()
     {
         if (Auth::check() && Auth::user()->staff && Auth::user()->staff->is_active) {
-            return redirect()->route('staff.dashboard');
+            return redirect()->route($this->isDoctor() ? 'doctor.dashboard' : 'staff.dashboard');
         }
 
         return view('auth.staff-login');
@@ -43,7 +63,9 @@ class StaffAuthController extends Controller
                 ->onlyInput('email');
         }
 
-        return redirect()->intended(route('staff.dashboard'));
+        $dashboardRoute = $this->isDoctor() ? 'doctor.dashboard' : 'staff.dashboard';
+
+        return redirect()->intended(route($dashboardRoute));
     }
 
     public function logout(Request $request)
