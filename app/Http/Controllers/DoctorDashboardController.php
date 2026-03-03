@@ -108,6 +108,16 @@ class DoctorDashboardController extends Controller
             ->whereDate('created_on', $date)
             ->orderBy('created_on', 'desc');
 
+        $search = trim((string) $request->query('search', ''));
+
+        if ($search !== '') {
+            $query->whereHas('patient', function ($q) use ($search) {
+                $q->where('first_name', 'like', '%' . $search . '%')
+                    ->orWhere('last_name', 'like', '%' . $search . '%')
+                    ->orWhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ['%' . $search . '%']);
+            });
+        }
+
         $patientId = $request->query('patient_id');
         if ($patientId) {
             $query->where('patient_id', $patientId);
@@ -119,6 +129,7 @@ class DoctorDashboardController extends Controller
             'records' => $records,
             'patientId' => $patientId,
             'date' => $date,
+            'search' => $search,
         ]);
     }
 }

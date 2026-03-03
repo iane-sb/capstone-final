@@ -58,14 +58,26 @@
                         </p>
                     </div>
                     <div class="flex items-center gap-3">
-                        <form method="GET" action="{{ route('doctor.medical-records') }}" class="flex items-center gap-2 text-sm">
-                            <label class="text-gray-600">Date:</label>
-                            <input
-                                type="date"
-                                name="date"
-                                value="{{ $date ?? now()->toDateString() }}"
-                                class="border border-gray-300 rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                            >
+                        <form method="GET" action="{{ route('doctor.medical-records') }}" class="flex flex-col md:flex-row md:items-center gap-2 text-sm">
+                            <div class="flex items-center gap-2">
+                                <label class="text-gray-600">Date:</label>
+                                <input
+                                    type="date"
+                                    name="date"
+                                    value="{{ $date ?? now()->toDateString() }}"
+                                    class="border border-gray-300 rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                                >
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <label class="text-gray-600">Patient:</label>
+                                <input
+                                    type="text"
+                                    name="search"
+                                    value="{{ $search ?? request('search') }}"
+                                    placeholder="Search by patient name"
+                                    class="border border-gray-300 rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-blue-400 focus:outline-none w-full md:w-56"
+                                >
+                            </div>
                             @if($patientId)
                                 <input type="hidden" name="patient_id" value="{{ $patientId }}">
                             @endif
@@ -73,12 +85,12 @@
                                 type="submit"
                                 class="bg-blue-600 text-white px-3 py-1.5 rounded-lg font-semibold hover:bg-blue-700 transition"
                             >
-                                Go
+                                Filter
                             </button>
                         </form>
                         @if($patientId)
                             <a
-                                href="{{ route('doctor.medical-records', ['date' => $date ?? now()->toDateString()]) }}"
+                                href="{{ route('doctor.medical-records', ['date' => $date ?? now()->toDateString(), 'search' => $search ?? request('search')]) }}"
                                 class="text-sm text-blue-600 hover:underline"
                             >
                                 Show all patients
