@@ -26,8 +26,27 @@ class DoctorDashboardController extends Controller
         ]);
     }
 
-    public function addRecord(Patient $patient)
+    public function addRecord(Request $request, Patient $patient)
     {
+        $appointmentId = $request->query('appointment_id');
+
+        if ($appointmentId) {
+            $appointment = Appointment::where('id', $appointmentId)
+                ->where('patient_id', $patient->id)
+                ->first();
+        } else {
+            $appointment = Appointment::where('patient_id', $patient->id)
+                ->where('schedule', now()->toDateString())
+                ->orderByDesc('schedule_time')
+                ->first();
+        }
+
+        if (! $appointment || $appointment->status !== 'started') {
+            return redirect()
+                ->route('doctor.dashboard', ['date' => now()->toDateString()])
+                ->withErrors(['appointment' => 'You can only add a diagnosis for a patient whose appointment has been started by staff.']);
+        }
+
         $diagnoses = Diagnosis::orderBy('name')->get();
         $currentRecord = MedicalRecord::with('diagnosis')
             ->where('patient_id', $patient->id)
@@ -38,6 +57,7 @@ class DoctorDashboardController extends Controller
             'patient' => $patient,
             'diagnoses' => $diagnoses,
             'currentRecord' => $currentRecord,
+            'appointment' => $appointment,
         ]);
     }
 
@@ -45,10 +65,25 @@ class DoctorDashboardController extends Controller
     {
         $validated = $request->validate([
             'patient_id' => 'required|exists:patients,id',
+            'appointment_id' => 'required|exists:appointments,id',
             'diagnosis_id' => 'nullable|exists:diagnoses,id',
             'diagnosis_name' => 'nullable|string|max:255',
             'details' => 'required|string|max:1000',
         ]);
+
+        $appointment = Appointment::findOrFail($validated['appointment_id']);
+
+        if ((int) $appointment->patient_id !== (int) $validated['patient_id']) {
+            return back()
+                ->withErrors(['appointment_id' => 'The selected appointment does not belong to this patient.'])
+                ->withInput();
+        }
+
+        if ($appointment->status !== 'started') {
+            return back()
+                ->withErrors(['appointment_id' => 'You can only add or update a diagnosis when the appointment status is "started".'])
+                ->withInput();
+        }
 
         $diagnosisId = $validated['diagnosis_id'] ?? null;
         $diagnosisName = trim($validated['diagnosis_name'] ?? '');
@@ -88,6 +123,10 @@ class DoctorDashboardController extends Controller
                 'created_on' => now(),
             ]);
         }
+
+        $appointment->update([
+            'status' => 'completed',
+        ]);
 
         return redirect()
             ->route('doctor.medical-records', ['patient_id' => $validated['patient_id']])

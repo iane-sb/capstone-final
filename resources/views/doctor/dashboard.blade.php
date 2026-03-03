@@ -113,11 +113,13 @@
                                         </span>
                                     </td>
                                     <td class="px-4 py-3">
-                                        @if($appointment->patient)
-                                            <a href="{{ route('doctor.patients.add-record', $appointment->patient) }}"
+                                        @if($appointment->patient && $appointment->status === 'started')
+                                            <a href="{{ route('doctor.patients.add-record', ['patient' => $appointment->patient, 'appointment_id' => $appointment->id]) }}"
                                                class="inline-flex items-center gap-1 bg-blue-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg hover:bg-blue-700 transition">
                                                 Add diagnosis
                                             </a>
+                                        @elseif($appointment->patient)
+                                            <span class="text-xs text-gray-400">Diagnosis available when status is "started"</span>
                                         @else
                                             —
                                         @endif

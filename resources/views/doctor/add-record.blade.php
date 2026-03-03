@@ -35,6 +35,22 @@
             @endif
 
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                @isset($appointment)
+                    <div class="mb-4 flex items-center justify-between text-sm">
+                        <div>
+                            <p class="font-medium text-gray-700">
+                                Queue #{{ str_pad($appointment->queue_number, 3, '0', STR_PAD_LEFT) }}
+                                · {{ \Carbon\Carbon::parse($appointment->schedule_time)->format('h:i A') }}
+                            </p>
+                            <p class="text-xs text-gray-500">
+                                Status:
+                                <span class="inline-flex px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 text-xs font-medium">
+                                    {{ ucfirst($appointment->status) }}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                @endisset
                 @if($currentRecord)
                     <div class="mb-6 p-4 rounded-xl bg-blue-50 border border-blue-200">
                         <p class="text-sm font-semibold text-blue-900">Current diagnosis</p>
@@ -53,6 +69,9 @@
                 <form method="POST" action="{{ route('doctor.medical-records.store') }}" class="space-y-6">
                     @csrf
                     <input type="hidden" name="patient_id" value="{{ $patient->id }}">
+                    @isset($appointment)
+                        <input type="hidden" name="appointment_id" value="{{ $appointment->id }}">
+                    @endisset
 
                     <div>
                         <label for="diagnosis_id" class="block text-sm font-medium text-gray-700 mb-1">Select existing diagnosis (optional)</label>
